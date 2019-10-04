@@ -35,6 +35,16 @@ class ApiClient
     }
 
     /**
+     * Array of default headers.
+     *
+     * @return array
+     */
+    protected function defaultHeaders()
+    {
+        return [];
+    }
+
+    /**
      * Set the Guzzle client.
      *
      * @param Client $client
@@ -59,6 +69,30 @@ class ApiClient
     }
 
     /**
+     * Shorthand function for GET requests.
+     *
+     * @param string $uri
+     * @param array $options
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function get($uri, array $options = [])
+    {
+        return $this->request('GET', $uri, $options);
+    }
+
+    /**
+     * Shorthand function for POST requests.
+     *
+     * @param string $uri
+     * @param array $options
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function post($uri, array $options = [])
+    {
+        return $this->request('POST', $uri, $options);
+    }
+
+    /**
      * Execute a given request.
      *
      * @param string $method
@@ -70,19 +104,9 @@ class ApiClient
     {
         $uri = $this->addDefaultQueryParams($uri);
 
-        return $this->client->request($method, $uri, $options);
-    }
+        $options = array_merge($options, $this->defaultHeaders());
 
-    /**
-     * Shorthand function for GET requests.
-     *
-     * @param string $uri
-     * @param array $options
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    protected function get($uri, array $options = [])
-    {
-        return $this->request('GET', $uri, $options);
+        return $this->client->request($method, $uri, $options);
     }
 
     /**

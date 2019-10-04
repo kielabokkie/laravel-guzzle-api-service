@@ -21,7 +21,7 @@ class ApiServiceFake extends ApiClient
     protected function defaultQueryParams()
     {
         return [
-            'apiKey' => '123xxx'
+            'apiKey' => '123xxx',
         ];
     }
 
@@ -33,6 +33,12 @@ class ApiServiceFake extends ApiClient
         $this->setClient();
     }
 
+    /**
+     * Get the full uri.
+     *
+     * @param string $uri
+     * @return string
+     */
     public function getFullUri($uri)
     {
         return $this->addDefaultQueryParams($uri);

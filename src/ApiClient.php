@@ -8,7 +8,7 @@ use GuzzleHttp\HandlerStack;
 class ApiClient
 {
     /**
-     * Http client
+     * Http client.
      *
      * @var Client
      */
@@ -51,7 +51,7 @@ class ApiClient
 
             $client = new Client([
                 'base_uri' => $this->baseUrl,
-                'handler' => $stack
+                'handler' => $stack,
             ]);
         }
 

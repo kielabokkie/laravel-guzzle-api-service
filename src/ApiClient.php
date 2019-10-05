@@ -52,17 +52,16 @@ class ApiClient
     protected function setClient(Client $client = null)
     {
         if ($client === null) {
-            $stack = HandlerStack::create();
-
-            // Push Guzzle middlewares on to the handler stack
-            foreach ($this->middelwares() as $middleware) {
-                $stack->push($middleware);
-            }
-
             $client = new Client([
                 'base_uri' => $this->baseUrl,
-                'handler' => $stack,
             ]);
+        }
+
+        $handlerStack = $client->getConfig('handler');
+
+        // Push Guzzle middlewares on to the handler stack
+        foreach ($this->middelwares() as $middleware) {
+            $handlerStack->push($middleware);
         }
 
         $this->client = $client;
@@ -90,6 +89,30 @@ class ApiClient
     protected function post($uri, array $options = [])
     {
         return $this->request('POST', $uri, $options);
+    }
+
+    /**
+     * Shorthand function for PUT requests.
+     *
+     * @param string $uri
+     * @param array $options
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function put($uri, array $options = [])
+    {
+        return $this->request('PUT', $uri, $options);
+    }
+
+    /**
+     * Shorthand function for DELETE requests.
+     *
+     * @param string $uri
+     * @param array $options
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function delete($uri, array $options = [])
+    {
+        return $this->request('DELETE', $uri, $options);
     }
 
     /**

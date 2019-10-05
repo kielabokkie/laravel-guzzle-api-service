@@ -3,6 +3,7 @@
 namespace Kielabokkie\GuzzleApiService\Tests;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Middleware;
 use Kielabokkie\GuzzleApiService\ApiClient;
 
 class ApiServiceFake extends ApiClient
@@ -13,6 +14,35 @@ class ApiServiceFake extends ApiClient
      * @var string
      */
     protected $baseUrl = 'https://httpbin.org';
+
+    /**
+     * Array of headers that were in the request.
+     *
+     * @var array
+     */
+    public $interceptedHeaders;
+
+    /**
+     * The request method.
+     *
+     * @var string
+     */
+    public $interceptedMethod;
+
+    /**
+     * Array of middlewares to be pushed on to the handler stack.
+     *
+     * @return array
+     */
+    protected function middelwares()
+    {
+        $tapMiddleware = Middleware::tap(function ($request, $options) {
+            $this->interceptedMethod = $request->getMethod();
+            $this->interceptedHeaders = array_keys($options);
+        });
+
+        return [$tapMiddleware];
+    }
 
     /**
      * Array of default query parameters.
@@ -34,7 +64,7 @@ class ApiServiceFake extends ApiClient
     protected function defaultHeaders()
     {
         return [
-            'X-Foo' => ['Bar', 'Baz']
+            'X-Foo' => ['Bar', 'Baz'],
         ];
     }
 
@@ -77,5 +107,27 @@ class ApiServiceFake extends ApiClient
     public function postRequest($uri, $data)
     {
         return $this->post($uri, $data);
+    }
+
+    /**
+     * PUT request.
+     *
+     * @param string $uri
+     * @return string
+     */
+    public function putRequest($uri, $data)
+    {
+        return $this->put($uri, $data);
+    }
+
+    /**
+     * DELETE request.
+     *
+     * @param string $uri
+     * @return string
+     */
+    public function deleteRequest($uri)
+    {
+        return $this->delete($uri);
     }
 }

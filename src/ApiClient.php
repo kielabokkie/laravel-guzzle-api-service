@@ -3,7 +3,6 @@
 namespace Kielabokkie\GuzzleApiService;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\HandlerStack;
 
 class ApiClient
 {

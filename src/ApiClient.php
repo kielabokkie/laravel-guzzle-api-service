@@ -5,7 +5,6 @@ namespace Kielabokkie\GuzzleApiService;
 use Concat\Http\Middleware\Logger as GuzzleLogger;
 use GuzzleHttp\Client;
 use GuzzleHttp\MessageFormatter;
-use GuzzleHttp\Middleware;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 

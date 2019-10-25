@@ -29,13 +29,24 @@ class ApiClient
 
     protected function defaultMiddlewares()
     {
-        $logger = new Logger('api');
-        $logger->pushHandler(new StreamHandler(storage_path('logs/api.log'), Logger::DEBUG));
+        $middlewares = collect();
 
-        $middleware = new GuzzleLogger($logger);
-        $middleware->setFormatter(new MessageFormatter('{req_header_User-Agent} - "{method} {target} HTTP/{version}" - {req_body} - {code} - {res_body}'));
+        if (config('api-service.logging_enabled') === true) {
+            $logger = new Logger('api');
+            $logger->pushHandler(
+                new StreamHandler(storage_path('logs/api.log'), Logger::DEBUG)
+            );
 
-        return [$middleware];
+            $formatter = new MessageFormatter(
+                '{req_header_User-Agent} - "{method} {target} HTTP/{version}" - {req_body} - {code} - {res_body}'
+            );
+
+            $loggerMiddleware = new GuzzleLogger($logger, $formatter);
+
+            $middlewares->push($loggerMiddleware);
+        }
+
+        return $middlewares->toArray();
     }
 
     /**

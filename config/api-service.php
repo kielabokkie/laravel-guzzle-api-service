@@ -11,5 +11,5 @@ return [
      * This will be appended to your base namespace. So the config below
      * will create a class under App\Support\Services.
      */
-    'namespace' => 'Support\Services'
+    'namespace' => 'Support\Services',
 ];
